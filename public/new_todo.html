@@ -6,6 +6,95 @@
     <title>Document</title>
 </head>
 <body>
+    <h1>Create a New Todo</h1>
+    <form id="createNewTodo">
+        <label for="users">User:</label></br>
+        <select id="users"></select></br>
+        <label for="description">Description:</label></br>
+        <textarea id="description" name="description"></textarea></br>
+        <label for="category">Category:</label></br>
+        <select id="category"></select><br>
+        <label for="priority">Priority:</label></br>
+        <select id="priority">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+        </select></br>
+        <label for="deadline">Deadline:</label></br>
+        <input type="date" id="deadline" name="deadline"></br>
+        <button type="submit" onclick="createNewTodo()">Create</button>
+    </form>
     
+    <script>
+        window.onload = function() {
+            fetchAllUsers();
+            fetchAllCategories();
+        }
+
+        function fetchAllUsers() {
+            fetch('http://localhost:8083/api/users')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const users = document.getElementById('users')
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.innerHTML = user.name;
+                    users.append(option);
+                });
+            })
+        }
+
+        function fetchAllCategories() {
+            fetch('http://localhost:8083/api/categories')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const categorySelect = document.getElementById('category');
+                    data.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.name;
+                        option.innerHTML = category.name;
+                        categorySelect.append(option);
+                    });
+                })
+        }
+
+        function createNewTodo() {
+            const userId = document.getElementById('users').value;
+            const description = document.getElementById('description').value;
+            const category = document.getElementById('category').value;
+            const priority = document.getElementById('priority').value;
+            const deadline = document.getElementById('deadline').value;
+
+            fetch('http://localhost:8083/api/todos', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    userid: userId,
+                    description: description,
+                    category: category,
+                    priority: priority,
+                    deadline: deadline
+                })
+            })
+            .then(response => {
+                console.log(response);
+                if (response.ok) {
+                    const userChoice = confirm('Todo added successfully. Would you like to view all todos?');
+                    if (userChoice) {
+                        window.location.href = '/todos.html';
+                    }
+                } else {
+                    alert('Error adding todo');
+                }
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+    </script>
 </body>
 </html>
