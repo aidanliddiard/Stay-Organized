@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos</title>
+</head>
+<body>
+    <h1>Todos:</h1>
+    <select id="users" onChange="fetchTodosByUser()">
+        <option value="all">All Users</option>
+    </select>
+
+    <ul id="todoList">
+    </ul>
+    <!-- <table>
+        <thead>
+            <tr>
+                <th>Monday</th>
+                <th>Tuesday</th>
+                <th>Wednesday</th>
+                <th>Thursday</th>
+                <th>Friday</th>
+                <th>Saturday</th>
+                <th>Sunday</th>
+            </tr>
+        </thead>
+        <tbody id="tbody">
+        </tbody>
+    </table> -->
+    <script>
+        window.onload = function() {
+            fetchAllTodos();
+            fetchAllUsers();
+        }
+
+        function fetchAllTodos() {
+            fetch('http://localhost:8083/api/todos')
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const todoList = document.getElementById('todoList')
+                    data.forEach(todo => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            Category: ${todo.category}<br>
+                            Description: ${todo.description}<br>
+                            Deadline: ${todo.deadline}<br>
+                            Priority: ${todo.priority}<br>
+                        `;
+                        todoList.append(li);
+                    });
+                })
+        }
+
+        function fetchAllUsers() {
+            fetch('http://localhost:8083/api/users')
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const users = document.getElementById('users')
+                data.forEach(user => {
+                    const option = document.createElement('option');
+                    option.value = user.id;
+                    option.innerHTML = user.name;
+                    users.append(option);
+                });
+            })
+        }
+
+        function fetchTodosByUser() {
+            const usersSelect = document.getElementById('users');
+            const selectedUserId = usersSelect.value;
+            console.log(selectedUserId);
+            if (selectedUserId === 'all') {
+                fetchAllTodos();
+                return;
+            }
+
+            fetch(`http://localhost:8083/api/todos/byuser/${selectedUserId}`)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);
+                    const todoList = document.getElementById('todoList')
+                    todoList.innerHTML = '';
+                    data.forEach(todo => {
+                        const li = document.createElement('li');
+                        li.innerHTML = `
+                            Category: ${todo.category}<br>
+                            Description: ${todo.description}<br>
+                            Deadline: ${todo.deadline}<br>
+                            Priority: ${todo.priority}<br>
+                        `;
+                        todoList.append(li);
+                    });
+                })
+        }
+    </script>
+</body>
+</html>

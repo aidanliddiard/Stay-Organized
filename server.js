@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Serve static front-end files (HTML, etc.) from "./public"
-// app.use(express.static("public"));
+app.use(express.static("public"));
 
 
 ///////////////////////////////////////////////////////////////////////
@@ -356,5 +356,5 @@ app.post("/api/users", function (request, response) {
 
 const server = app.listen(8083, () => {
     const port = server.address().port;
-    console.info("App listening at port", port);
+    console.info("App listening at http://localhost:%s", port);
 });
