@@ -3,98 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <title>Document</title>
 </head>
-<body>
-    <h1>Create a New Todo</h1>
-    <form id="createNewTodo">
-        <label for="users">User:</label></br>
-        <select id="users"></select></br>
-        <label for="description">Description:</label></br>
-        <textarea id="description" name="description"></textarea></br>
-        <label for="category">Category:</label></br>
-        <select id="category"></select><br>
-        <label for="priority">Priority:</label></br>
-        <select id="priority">
-            <option value="Low">Low</option>
-            <option value="Medium">Medium</option>
-            <option value="High">High</option>
-        </select></br>
-        <label for="deadline">Deadline:</label></br>
-        <input type="date" id="deadline" name="deadline"></br>
-        <button type="submit" onclick="createNewTodo()">Create</button>
+<body class="flex justify-center">
+    <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" id="createNewTodo">
+        <h1 class="block font-bold text-xl mb-4">Create New Todo</h1>
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="users">
+            User
+        </label>
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="users">
+                <option selected disabled hidden>Select User</option>
+            </select>
+       
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
+                Description
+            </label>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Describe your todo"></textarea>
+          </div>
+
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="category">
+            Category
+        </label>
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="category">
+                <option selected disabled hidden>Select Category</option>
+            </select>
+
+        <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priority">
+            Priority
+        </label>
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priority">
+                <option selected disabled hidden>Select Priority Level</option>
+                <option value="Low">Low</option>
+                <option value="Medium">Medium</option>
+                <option value="High">High</option>
+            </select>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="deadline">
+                Deadline
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="date" id="deadline" name="deadline" required>
+        </div>
+        <div class="flex flex-col items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit" onclick="createNewTodo()">
+                Create
+            </button>
+        </div>
     </form>
     
-    <script>
-        window.onload = function() {
-            fetchAllUsers();
-            fetchAllCategories();
-        }
-
-        function fetchAllUsers() {
-            fetch('http://localhost:8083/api/users')
-            .then(response => response.json())
-            .then(data => {
-                console.log(data);
-                const users = document.getElementById('users')
-                data.forEach(user => {
-                    const option = document.createElement('option');
-                    option.value = user.id;
-                    option.innerHTML = user.name;
-                    users.append(option);
-                });
-            })
-        }
-
-        function fetchAllCategories() {
-            fetch('http://localhost:8083/api/categories')
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data);
-                    const categorySelect = document.getElementById('category');
-                    data.forEach(category => {
-                        const option = document.createElement('option');
-                        option.value = category.name;
-                        option.innerHTML = category.name;
-                        categorySelect.append(option);
-                    });
-                })
-        }
-
-        function createNewTodo() {
-            const userId = document.getElementById('users').value;
-            const description = document.getElementById('description').value;
-            const category = document.getElementById('category').value;
-            const priority = document.getElementById('priority').value;
-            const deadline = document.getElementById('deadline').value;
-
-            fetch('http://localhost:8083/api/todos', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    userid: userId,
-                    description: description,
-                    category: category,
-                    priority: priority,
-                    deadline: deadline
-                })
-            })
-            .then(response => {
-                console.log(response);
-                if (response.ok) {
-                    const userChoice = confirm('Todo added successfully. Would you like to view all todos?');
-                    if (userChoice) {
-                        window.location.href = '/todos.html';
-                    }
-                } else {
-                    alert('Error adding todo');
-                }
-            }).catch(error => {
-                console.error(error);
-            });
-        }
+    <script src="./scripts/new-todo.js">
+        
     </script>
 </body>
 </html>

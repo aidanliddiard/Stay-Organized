@@ -1,8 +1,3 @@
-// const express = require('express');
-// const app = express();
-
-// app.use(express.static('public'));
-
 function signUp(event) {
     event.preventDefault();
 
@@ -27,7 +22,6 @@ function signUp(event) {
         })
     })
     .then(response => {
-        console.log(response);
         if (response.ok) {
             alert('User added successfully');
             window.location.href = '/';
