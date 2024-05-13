@@ -348,6 +348,47 @@ app.post("/api/users", function (request, response) {
         .json(user);
 });
 
+app.post("/api/users/login", function (request, response) {
+    const { username, password } = request.body;
+    console.info(`LOG: Got a POST request for login with username ${username}`);
+
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const users = JSON.parse(json);
+
+    // Find the user
+    const byUsername = (user) => user.username.toLowerCase() === username.toLowerCase();
+    const matchingUser = users.find(byUsername);
+
+    // If no matching user
+    if (!matchingUser) {
+        console.warn(`LOG: **NOT FOUND**: user ${username} does not exist!`);
+        
+        response
+            .status(404)
+            .json({ error: "User not found or invalid password" });
+    
+        return;
+    }
+
+    // Check the password
+    if (matchingUser.password !== password) {
+        console.warn(`LOG: **UNAUTHORIZED**: invalid password for user ${username}`);
+        
+        response
+            .status(404)
+            .json({ error: "User not found or invalid password" });
+    
+        return;
+    }
+
+    // Login successful
+    console.info(`LOG: **SUCCESS**: user ${username} logged in successfully`);
+
+    response
+        .status(200)
+        .json({ message: "Logged in successfully" });
+});
+
 
 ///////////////////////////////////////////////////////////////////////
 // Start the server ///////////////////////////////////////////////////
