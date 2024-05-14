@@ -1,5 +1,5 @@
 window.addEventListener('load', function() {
-    const userId = localStorage.getItem('user-id');
+    const userId = sessionStorage.getItem('user-id');
     const createTodoLink = document.getElementById('createTodoLink');
     const signInLink = document.getElementById('signInLink');
     const signOutLink = document.getElementById('signOutLink');
@@ -26,7 +26,7 @@ function signIn() {
     .then(response => response.json())
     .then(data => {
         if (data.message === 'Logged in successfully') {
-            localStorage.setItem('user-id', true);
+            sessionStorage.setItem('user-id', true);
             window.location.href = '/todos.html';
         } else {
             console.error('Login failed:', data.error);
@@ -38,6 +38,6 @@ function signIn() {
 }
 
 function signOut() {
-    localStorage.removeItem('user-id');
+    sessionStorage.removeItem('user-id');
     window.location.href = '/index.html';
 }
