@@ -1,3 +1,14 @@
+window.addEventListener('load', function() {
+    const userId = localStorage.getItem('user-id');
+    const createTodoLink = document.getElementById('createTodoLink');
+    const signInLink = document.getElementById('signInLink');
+    const signOutLink = document.getElementById('signOutLink');
+ 
+    createTodoLink.style.display = userId ? 'block' : 'none';
+    signInLink.style.display = userId ? 'none' : 'block';
+    signOutLink.style.display = userId ? 'block' : 'none';
+});
+
 function signIn() {
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
@@ -12,17 +23,21 @@ function signIn() {
             password: password
         })
     })
-        .then(response => {
-            if (response.ok) {
-                window.location.href = '/todos.html';
-            } else {
-                return response.json().then(error => {
-                    throw error;
-                });
-            }
-        })
-        .catch(({error}) => {
-            alert(error); 
-            console.error(error);
-        })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Logged in successfully') {
+            localStorage.setItem('user-id', true);
+            window.location.href = '/todos.html';
+        } else {
+            console.error('Login failed:', data.error);
+        }
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+}
+
+function signOut() {
+    localStorage.removeItem('user-id');
+    window.location.href = '/index.html';
 }

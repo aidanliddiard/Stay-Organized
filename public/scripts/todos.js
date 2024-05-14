@@ -1,7 +1,7 @@
-window.onload = function() {
+window.addEventListener('load', function() {
     fetchAllTodos();
     fetchAllUsers();
-}
+});
 
 function fetchAllTodos() {
     fetch('http://localhost:8083/api/todos')

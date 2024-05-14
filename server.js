@@ -385,7 +385,7 @@ app.post("/api/users/login", function (request, response) {
 
     response
         .status(200)
-        .json({ message: "Logged in successfully" });
+        .json({ message: "Logged in successfully", id: matchingUser.id });
 });
 
 
