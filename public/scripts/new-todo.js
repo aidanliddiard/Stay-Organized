@@ -1,21 +1,21 @@
 window.addEventListener('load', function() {
-    fetchAllUsers();
+    // fetchAllUsers();
     fetchAllCategories();
 });
 
-function fetchAllUsers() {
-    fetch('http://localhost:8083/api/users')
-    .then(response => response.json())
-    .then(data => {
-        const users = document.getElementById('users')
-        data.forEach(user => {
-            const option = document.createElement('option');
-            option.value = user.id;
-            option.innerHTML = user.name;
-            users.append(option);
-        });
-    })
-}
+// function fetchAllUsers() {
+//     fetch('http://localhost:8083/api/users')
+//     .then(response => response.json())
+//     .then(data => {
+//         const users = document.getElementById('users')
+//         data.forEach(user => {
+//             const option = document.createElement('option');
+//             option.value = user.id;
+//             option.innerHTML = user.name;
+//             users.append(option);
+//         });
+//     })
+// }
 
 function fetchAllCategories() {
     fetch('http://localhost:8083/api/categories')
@@ -32,7 +32,7 @@ function fetchAllCategories() {
 }
 
 function createNewTodo() {
-    const userId = document.getElementById('users').value;
+    const userId = sessionStorage.getItem('user-id');
     const description = document.getElementById('description').value;
     const category = document.getElementById('category').value;
     const priority = document.getElementById('priority').value;

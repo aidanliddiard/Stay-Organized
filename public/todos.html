@@ -41,8 +41,15 @@
         </div>
     </nav>
     <h1>Todos:</h1>
-    <select id="users" onChange="fetchTodosByUser()">
-        <option value="all">All Users</option>
+    <select id="categories" onChange="fetchTodosByCategory()">
+        <option value="all">All categories</option>
+    </select>
+    <select id="sort" onChange="sortBy()">
+        <option value="all">Date created</option>
+        <option value="alphabetical">Alphabetical</option>
+        <option value="priorityHighLow">Priority High-Low</option>
+        <option value="priorityLowHigh">Priority Low-High</option>
+        <option value="deadline">Deadline</option>
     </select>
 
     <div class="flex flex-wrap justify-center" id="todoList"></div>

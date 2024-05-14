@@ -25,8 +25,9 @@ function signIn() {
     })
     .then(response => response.json())
     .then(data => {
+        console.log(data)
         if (data.message === 'Logged in successfully') {
-            sessionStorage.setItem('user-id', true);
+            sessionStorage.setItem('user-id', data.id);
             window.location.href = '/todos.html';
         } else {
             console.error('Login failed:', data.error);

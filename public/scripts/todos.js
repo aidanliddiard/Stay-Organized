@@ -1,46 +1,105 @@
 window.addEventListener('load', function() {
     fetchAllTodos();
-    fetchAllUsers();
+    fetchAllCategories();
 });
 
+const userId = sessionStorage.getItem('user-id');
+
 function fetchAllTodos() {
-    fetch('http://localhost:8083/api/todos')
-        .then(response => response.json())
-        .then(data => {
-            displayTodos(data);
-        })
-}
-
-function fetchAllUsers() {
-    fetch('http://localhost:8083/api/users')
-    .then(response => response.json())
-    .then(data => {
-        console.log(data);
-        const users = document.getElementById('users')
-        data.forEach(user => {
-            const option = document.createElement('option');
-            option.value = user.id;
-            option.innerHTML = user.name;
-            users.append(option);
-        });
-    })
-}
-
-function fetchTodosByUser() {
-    const usersSelect = document.getElementById('users');
-    const selectedUserId = usersSelect.value;
-    console.log(selectedUserId);
-    if (selectedUserId === 'all') {
-        fetchAllTodos();
-        return;
+    if (!userId) {
+        fetchTodosByUser(11)
     } else {
+        fetchTodosByUser(userId);
+    }
+}
 
-        
-        fetch(`http://localhost:8083/api/todos/byuser/${selectedUserId}`)
+function fetchTodosByUser(id) {
+        fetch(`http://localhost:8083/api/todos/byuser/${id}`)
         .then(response => response.json())
         .then(data => {
             displayTodos(data);
             })
+    }
+
+function fetchAllCategories() {
+    fetch('http://localhost:8083/api/categories')
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            const categories = document.getElementById('categories')
+            data.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.innerHTML = category.name;
+                categories.append(option);
+            });
+        })
+}
+
+function fetchTodosByCategory() {
+    const categorySelect = document.getElementById('categories');
+    const selectedCategory = categorySelect.value;
+    if (selectedCategory === 'all') {
+        fetchTodosByUser(userId);
+        return;
+    } else {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const filteredTodos = data.filter(todo => todo.category === selectedCategory);
+                displayTodos(filteredTodos);
+            });
+    }
+}
+
+function sortBy() {
+    const sortSelect = document.getElementById('sort');
+    const selectedSort = sortSelect.value;
+
+    const priorityValues = {
+        'Low': 1,
+        'Medium': 2,
+        'High': 3
+    };
+    if (selectedSort === 'all') {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            displayTodos(data);
+        });
+    }
+    else if (selectedSort === 'alphabetical') {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const sortedTodos = data.sort((a, b) => a.description.localeCompare(b.description));
+                displayTodos(sortedTodos);
+            })
+    }
+    else if (selectedSort === 'priorityHighLow') {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data)
+                const sortedTodos = data.sort((a, b) => priorityValues[b.priority] - priorityValues[a.priority]);
+                displayTodos(sortedTodos);
+            });
+    }
+    else if (selectedSort === 'priorityLowHigh') {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const sortedTodos = data.sort((a, b) => priorityValues[a.priority] - priorityValues[b.priority]);
+                displayTodos(sortedTodos);
+            });
+    }
+    else if (selectedSort === 'deadline') {
+        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
+            .then(response => response.json())
+            .then(data => {
+                const sortedTodos = data.sort((a, b) => Date.parse(b.deadline) - Date.parse(a.deadline));
+                displayTodos(sortedTodos);
+            });
     }
 }
 

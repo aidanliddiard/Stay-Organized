@@ -24,7 +24,8 @@ function signUp(event) {
     .then(response => {
         if (response.ok) {
             alert('User added successfully');
-            window.location.href = '/';
+            sessionStorage.setItem('user-id', data.id);
+            window.location.href = '/new_todo.html';
         } else {
             return response.json().then(error => {
                 throw error;
