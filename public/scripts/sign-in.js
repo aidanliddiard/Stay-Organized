@@ -27,13 +27,25 @@ function signIn() {
             sessionStorage.setItem('user-id', data.id);
             window.location.href = '/todos.html';
         } else {
+            alert(data.error);
             console.error('Login failed:', data.error);
         }
     })
     .catch(console.error);
 }
 
+document.addEventListener('DOMContentLoaded', function() {
+    const hamburgerButton = document.querySelector('[data-collapse-toggle="navbar-default"]');
+    const navbarMenu = document.getElementById('navbar-default');
+
+    hamburgerButton.addEventListener('click', function() {
+        navbarMenu.classList.toggle('hidden');
+        navbarMenu.classList.toggle('block');
+    });
+});
+
 function signOut() {
     sessionStorage.removeItem('user-id');
     updateUI();
+    window.location.href = '/index.html';
 }

@@ -23,14 +23,17 @@ function signUp(event) {
     })
     .then(response => {
         if (response.ok) {
-            alert('User added successfully');
-            sessionStorage.setItem('user-id', data.id);
-            window.location.href = '/new_todo.html';
+            return response.json(); 
         } else {
             return response.json().then(error => {
                 throw error;
             });
         }
+    })
+    .then(data => { 
+        alert('User added successfully');
+        sessionStorage.setItem('user-id', data.id);
+        window.location.href = '/new_todo.html';
     })
     .catch(({error}) => {
         alert(error); 
