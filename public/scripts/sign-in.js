@@ -1,13 +1,16 @@
-window.addEventListener('load', function() {
+window.addEventListener('load', updateUI);
+
+function updateUI() {
     const userId = sessionStorage.getItem('user-id');
-    const createTodoLink = document.getElementById('createTodoLink');
-    const signInLink = document.getElementById('signInLink');
-    const signOutLink = document.getElementById('signOutLink');
- 
-    createTodoLink.style.display = userId ? 'block' : 'none';
-    signInLink.style.display = userId ? 'none' : 'block';
-    signOutLink.style.display = userId ? 'block' : 'none';
-});
+    toggleDisplay('createTodoLink', userId);
+    toggleDisplay('signInLink', !userId);
+    toggleDisplay('signOutLink', userId);
+}
+
+function toggleDisplay(elementId, condition) {
+    const element = document.getElementById(elementId);
+    element.style.display = condition ? 'block' : 'none';
+}
 
 function signIn() {
     const username = document.getElementById('username').value;
@@ -15,17 +18,11 @@ function signIn() {
 
     fetch('http://localhost:8083/api/users/login', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            username: username,
-            password: password
-        })
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
     })
     .then(response => response.json())
     .then(data => {
-        console.log(data)
         if (data.message === 'Logged in successfully') {
             sessionStorage.setItem('user-id', data.id);
             window.location.href = '/todos.html';
@@ -33,12 +30,10 @@ function signIn() {
             console.error('Login failed:', data.error);
         }
     })
-    .catch((error) => {
-        console.error('Error:', error);
-    });
+    .catch(console.error);
 }
 
 function signOut() {
     sessionStorage.removeItem('user-id');
-    window.location.href = '/index.html';
+    updateUI();
 }

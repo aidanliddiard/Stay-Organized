@@ -1,21 +1,6 @@
 window.addEventListener('load', function() {
-    // fetchAllUsers();
     fetchAllCategories();
 });
-
-// function fetchAllUsers() {
-//     fetch('http://localhost:8083/api/users')
-//     .then(response => response.json())
-//     .then(data => {
-//         const users = document.getElementById('users')
-//         data.forEach(user => {
-//             const option = document.createElement('option');
-//             option.value = user.id;
-//             option.innerHTML = user.name;
-//             users.append(option);
-//         });
-//     })
-// }
 
 function fetchAllCategories() {
     fetch('http://localhost:8083/api/categories')

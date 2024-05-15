@@ -44,7 +44,7 @@
     <div class="relative z-0 min-h-screen flex flex-col items-center">
         <div class="absolute inset-0 z-0 w-full h-full bg-cover bg-top backdrop-blur-md" style="background-image: url('./images/marissa-grootes-ck0i9Dnjtj0-unsplash.jpg');"></div>
         <div class="flex-grow"></div>
-        <section class="max-w-3xl p-4 bg-white rounded shadow-md text-center z-10">
+        <section  id="welcomeDescription" class="max-w-3xl p-4 bg-white rounded shadow-md text-center z-10">
             <h2 class="text-4xl font-bold mb-2">Welcome to Stay Organized!</h2>
             <p class="text-gray-700 p-4">Feel free to explore the site and features available. We've built a variety of tools to help you achieve your organization goals. Enjoy your journey!</p>
             <a href="./todos.html">
@@ -55,9 +55,21 @@
                 <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Sign Up</button>
             </a>
         </section>
+        <section id="signedInDesciption" class="max-w-3xl p-4 bg-white rounded shadow-md text-center z-10">
+            <h2 class="text-4xl font-bold mb-2">Welcome to Stay Organized!</h2>
+            <p class="text-gray-700 p-4">Thanks for signing up! Check the status of your todo list below.</p>
+            <a href="./todos.html">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Your Todos</button>
+            </a>
+            <p class="text-gray-700 p-4">Create a new todo to stay organized!</p>
+            <a href="/new_todo.html">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">Create New Todo</button>
+            </a>
+        </section>
         <div class="flex-grow"></div>
         <div class="flex-grow"></div>
     </div>
+    <script src ="./scripts/index.js"> </script>
     <script src="./scripts/sign-in.js"></script>
 </body> 
 </html>

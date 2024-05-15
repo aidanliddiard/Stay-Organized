@@ -1,31 +1,39 @@
+const API_URL = 'http://localhost:8083/api';
+const userId = sessionStorage.getItem('user-id') || 11;
+let currentCategory = 'all';
+let currentSort = 'all';
+
 window.addEventListener('load', function() {
-    fetchAllTodos();
-    fetchAllCategories();
+    fetchAndDisplayTodos();
+    fetchAndDisplayCategories();
 });
 
-const userId = sessionStorage.getItem('user-id');
-
-function fetchAllTodos() {
-    if (!userId) {
-        fetchTodosByUser(11)
-    } else {
-        fetchTodosByUser(userId);
-    }
+function fetchAndDisplayTodos() {
+    fetch(`${API_URL}/todos/byuser/${userId}`)
+        .then(response => response.json())
+        .then(todos => {
+            if (currentCategory !== 'all') {
+                todos = todos.filter(todo => todo.category === currentCategory);
+            }
+            switch (currentSort) {
+                case 'alphabetical':
+                    todos.sort(sortAlphabetically);
+                    break;
+                case 'priorityHighLow':
+                    todos.sort(sortPriorityHighLow);
+                    break;
+                case 'priorityLowHigh':
+                    todos.sort(sortPriorityLowHigh);
+                    break;
+            }
+            displayTodos(todos);
+        });
 }
 
-function fetchTodosByUser(id) {
-        fetch(`http://localhost:8083/api/todos/byuser/${id}`)
+function fetchAndDisplayCategories() {
+    fetch(`${API_URL}/categories`)
         .then(response => response.json())
         .then(data => {
-            displayTodos(data);
-            })
-    }
-
-function fetchAllCategories() {
-    fetch('http://localhost:8083/api/categories')
-        .then(response => response.json())
-        .then(data => {
-            console.log(data);
             const categories = document.getElementById('categories')
             data.forEach(category => {
                 const option = document.createElement('option');
@@ -33,110 +41,72 @@ function fetchAllCategories() {
                 option.innerHTML = category.name;
                 categories.append(option);
             });
-        })
+        });
 }
 
 function fetchTodosByCategory() {
-    const categorySelect = document.getElementById('categories');
-    const selectedCategory = categorySelect.value;
-    if (selectedCategory === 'all') {
-        fetchTodosByUser(userId);
-        return;
-    } else {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                const filteredTodos = data.filter(todo => todo.category === selectedCategory);
-                displayTodos(filteredTodos);
-            });
-    }
+    currentCategory = document.getElementById('categories').value;
+    fetchAndDisplayTodos();
 }
 
 function sortBy() {
-    const sortSelect = document.getElementById('sort');
-    const selectedSort = sortSelect.value;
+    currentSort = document.getElementById('sort').value;
+    fetchAndDisplayTodos();
+}
 
+function sortAlphabetically(a, b) {
+    return a.description.localeCompare(b.description);
+}
+
+function sortPriorityHighLow(a, b) {
+    return getPriorityValue(b) - getPriorityValue(a);
+}
+
+function sortPriorityLowHigh(a, b) {
+    return getPriorityValue(a) - getPriorityValue(b);
+}
+
+function getPriorityValue(todo) {
     const priorityValues = {
         'Low': 1,
         'Medium': 2,
         'High': 3
     };
-    if (selectedSort === 'all') {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-        .then(response => response.json())
-        .then(data => {
-            displayTodos(data);
-        });
-    }
-    else if (selectedSort === 'alphabetical') {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                const sortedTodos = data.sort((a, b) => a.description.localeCompare(b.description));
-                displayTodos(sortedTodos);
-            })
-    }
-    else if (selectedSort === 'priorityHighLow') {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                console.log(data)
-                const sortedTodos = data.sort((a, b) => priorityValues[b.priority] - priorityValues[a.priority]);
-                displayTodos(sortedTodos);
-            });
-    }
-    else if (selectedSort === 'priorityLowHigh') {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                const sortedTodos = data.sort((a, b) => priorityValues[a.priority] - priorityValues[b.priority]);
-                displayTodos(sortedTodos);
-            });
-    }
-    else if (selectedSort === 'deadline') {
-        fetch(`http://localhost:8083/api/todos/byuser/${userId}`)
-            .then(response => response.json())
-            .then(data => {
-                const sortedTodos = data.sort((a, b) => Date.parse(b.deadline) - Date.parse(a.deadline));
-                displayTodos(sortedTodos);
-            });
-    }
+    return priorityValues[todo.priority];
 }
 
 function completeTodo(id) {
-    fetch(`http://localhost:8083/api/todos/${id}`, {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            completed: true
-        })
-    })
-    .then((response) => {
-        if (response.ok) {
-            fetchAllTodos();
-        } else {
-            throw new Error('Error completing todo');
-        }
-    })
-    .catch((error) => console.error(error));
+    updateTodo(id, { completed: true });
 }
 
 function deleteTodo(id) {
-    fetch(`http://localhost:8083/api/todos/${id}`, {
-        method: 'DELETE'
-    }).then((response) => {
-        if (response.ok) {
-            fetchAllTodos();
-        } else {
-            throw new Error('Error deleting todo');
-        }
-    })
-    .catch((error) => console.error(error));
+    fetch(`${API_URL}/todos/${id}`, { method: 'DELETE' })
+        .then(response => {
+            if (response.ok) {
+                fetchAndDisplayTodos();
+            } else {
+                throw new Error('Error deleting todo');
+            }
+        })
+        .catch(console.error);
 }
 
-        
+function updateTodo(id, data) {
+    fetch(`${API_URL}/todos/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    })
+    .then(response => {
+        if (response.ok) {
+            fetchAndDisplayTodos();
+        } else {
+            throw new Error('Error updating todo');
+        }
+    })
+    .catch(console.error);
+}
+      
 function displayTodos(allTodos) {
     let todoList = document.getElementById("todoList");
     todoList.innerHTML = "";

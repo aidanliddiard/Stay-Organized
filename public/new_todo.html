@@ -40,16 +40,12 @@
         </div>
         </div>
     </nav>
+    <div class="relative z-0 min-h-screen flex flex-col items-center">
+        <div class="absolute inset-0 z-0 w-full h-full bg-cover bg-top backdrop-blur-md" style="background-image: url('./images/marissa-grootes-ck0i9Dnjtj0-unsplash.jpg');"></div>
     <div class="flex justify-center w-full">
-        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-xs">
+        <form class="bg-white shadow-md rounded px-8 pt-6 pb-8 m-8 max-w-xs z-10">
             <h1 class="block font-bold text-xl mb-4">Create New Todo</h1>
-            <!-- <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="users">
-                User
-            </label>
-            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="users">
-                <option selected disabled hidden>Select User</option>
-            </select> -->
-            
+
             <div class="mb-4">
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                     Description
@@ -87,6 +83,8 @@
             </div>
         </form>
     </div>
+    </div>
+</div>
     <script src="./scripts/new-todo.js"></script>
     <script src="./scripts/sign-in.js"></script>
     </body>
