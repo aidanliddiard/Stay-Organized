@@ -13,10 +13,14 @@ function fetchAllCategories() {
                 option.innerHTML = category.name;
                 categorySelect.append(option);
             });
-        })
+        }) .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
-function createNewTodo() {
+function createNewTodo(event) {
+    event.preventDefault();
+
     const userId = sessionStorage.getItem('user-id');
     const description = document.getElementById('description').value;
     const category = document.getElementById('category').value;
@@ -37,42 +41,45 @@ function createNewTodo() {
         })
     })
     .then(response => {
+        console.log(response.ok)
         if (response.ok) {
-            const userChoice = confirm('Todo added successfully. Would you like to view all todos?');
-            if (userChoice) {
-                window.location.href = '/todos.html';
-            }
+            showModal('Todo added successfully. Would you like to view all todos?')
         } else {
-            showModal();
+            return response.json().then(error => {
+                throw error;
+            });
         }
     }).catch(error => {
+        showModal('Error adding todo. Please try again.');
         console.error(error);
     });
+
+    function showModal(message) {
+        console.log('showModal', message);
+        document.getElementById('message').innerHTML = message;
+    
+        function hideModal() {
+            document.getElementById('popup-modal').classList.add('hidden');
+        }
+    
+        document.getElementById('popup-modal').classList.remove('hidden');
+    
+        const closeButton = document.getElementById('close-modal');
+        const redirectButton = document.getElementById('redirect');
+    
+        if (message === 'Todo added successfully. Would you like to view all todos?') {
+            console.log('here!!')
+            closeButton.innerHTML = 'Add another todo';
+            closeButton.classList.remove('bg-red-600', 'hover:bg-red-800');
+            closeButton.classList.add('bg-green-500', 'hover:bg-green-100');
+            redirectButton.classList.remove('hidden');
+    
+            closeButton.addEventListener('click', hideModal);
+            redirectButton.addEventListener('click', function() {
+                window.location.href = '/todos.html';
+            });
+        } else {
+            closeButton.addEventListener('click', hideModal);
+        }
+    }
 }
-
-function showModal() {
-    console.log('showModal');
-    // document.getElementById('modal-background').classList.remove('hidden');
-    document.getElementById('popup-modal').classList.remove('hidden');
-}
-
-function hideModal() {
-    // document.getElementById('modal-background').classList.add('hidden');
-    document.getElementById('popup-modal').classList.add('hidden');
-}
-
-document.getElementById('close-modal').addEventListener('click', hideModal);
-
-
-function showTodoModal(message) {
-    console.log('showModal');
-    document.getElementById('message').innerHTML = message;
-    document.getElementById('todo-popup-modal').classList.remove('hidden');
-}
-
-function hideTodoModal() {
-    // document.getElementById('modal-background').classList.add('hidden');
-    document.getElementById('todo-popup-modal').classList.add('hidden');
-}
-
-document.getElementById('close-modal').addEventListener('click', hideModal);

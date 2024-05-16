@@ -32,6 +32,18 @@ function signIn() {
         }
     })
     .catch(console.error);
+    
+    function showModal(message) {
+        console.log('showModal');
+        document.getElementById('message').innerHTML = message;
+        document.getElementById('popup-modal').classList.remove('hidden');
+    }
+    
+    function hideModal() {
+        document.getElementById('popup-modal').classList.add('hidden');
+    }
+    
+    document.getElementById('close-modal').addEventListener('click', hideModal);
 }
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -49,15 +61,3 @@ function signOut() {
     updateUI();
     window.location.href = '/index.html';
 }
-
-function showModal(message) {
-    console.log('showModal');
-    document.getElementById('message').innerHTML = message;
-    document.getElementById('popup-modal').classList.remove('hidden');
-}
-
-function hideModal() {
-    document.getElementById('popup-modal').classList.add('hidden');
-}
-
-document.getElementById('close-modal').addEventListener('click', hideModal);
