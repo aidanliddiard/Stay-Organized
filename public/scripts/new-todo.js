@@ -43,9 +43,36 @@ function createNewTodo() {
                 window.location.href = '/todos.html';
             }
         } else {
-            alert('Error adding todo');
+            showModal();
         }
     }).catch(error => {
         console.error(error);
     });
 }
+
+function showModal() {
+    console.log('showModal');
+    // document.getElementById('modal-background').classList.remove('hidden');
+    document.getElementById('popup-modal').classList.remove('hidden');
+}
+
+function hideModal() {
+    // document.getElementById('modal-background').classList.add('hidden');
+    document.getElementById('popup-modal').classList.add('hidden');
+}
+
+document.getElementById('close-modal').addEventListener('click', hideModal);
+
+
+function showTodoModal(message) {
+    console.log('showModal');
+    document.getElementById('message').innerHTML = message;
+    document.getElementById('todo-popup-modal').classList.remove('hidden');
+}
+
+function hideTodoModal() {
+    // document.getElementById('modal-background').classList.add('hidden');
+    document.getElementById('todo-popup-modal').classList.add('hidden');
+}
+
+document.getElementById('close-modal').addEventListener('click', hideModal);

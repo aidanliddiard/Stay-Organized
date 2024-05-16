@@ -50,21 +50,21 @@
                 <label class="block text-gray-700 text-sm font-bold mb-2" for="description">
                     Description
                 </label>
-                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Describe your todo"></textarea>
+                <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" placeholder="Describe your todo" required></textarea>
             </div>
             
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="category">
                 Category
             </label>
-            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="category">
-                <option selected disabled hidden>Select Category</option>
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="category" required>
+                <option selected disabled hidden value="">Select Category</option>
             </select>
             
             <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="priority">
                 Priority
             </label>
-            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priority">
-                <option selected disabled hidden>Select Priority Level</option>
+            <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="priority" required>
+                <option selected disabled hidden value="">Select Priority Level</option>
                 <option value="Low">Low</option>
                 <option value="Medium">Medium</option>
                 <option value="High">High</option>
@@ -83,8 +83,43 @@
             </div>
         </form>
     </div>
-    </div>
 </div>
+
+    <div id="popup-modal" tabindex="-1" class="hidden flex overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center">
+        <div class="relative p-4 w-full max-w-md max-h-full m-auto">
+                <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                    <div class="p-4 md:p-5 text-center">
+                        <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                        </svg>
+                        <h3 class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">Error adding todo.</h3>
+                        <button id="close-modal" data-modal-hide="popup-modal" type="button" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Ok
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div id="todo-popup-modal" tabindex="-1" class="hidden flex overflow-y-auto overflow-x-hidden fixed inset-0 z-50 justify-center items-center">
+            <div class="relative p-4 w-full max-w-md max-h-full m-auto">
+                    <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                        <div class="p-4 md:p-5 text-center">
+                            <svg class="mx-auto mb-4 text-gray-400 w-12 h-12 dark:text-gray-200" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 11V6m0 8h.01M19 10a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+                            </svg>
+                            <h3 id="message" class="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400"></h3>
+                            <button id="close-modal" data-modal-hide="popup-modal" type="button" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                                Create another Todo
+                            </button>
+                            <button id="redirect" data-modal-hide="popup-modal" type="button" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                              Go to Todo List
+                          </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
     <script src="./scripts/new-todo.js"></script>
     <script src="./scripts/sign-in.js"></script>
     </body>
