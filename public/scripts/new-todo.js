@@ -41,7 +41,6 @@ function createNewTodo(event) {
         })
     })
     .then(response => {
-        console.log(response.ok)
         if (response.ok) {
             showModal('Todo added successfully. Would you like to view all todos?')
         } else {
@@ -55,7 +54,6 @@ function createNewTodo(event) {
     });
 
     function showModal(message) {
-        console.log('showModal', message);
         document.getElementById('message').innerHTML = message;
     
         function hideModal() {
@@ -68,7 +66,6 @@ function createNewTodo(event) {
         const redirectButton = document.getElementById('redirect');
     
         if (message === 'Todo added successfully. Would you like to view all todos?') {
-            console.log('here!!')
             closeButton.innerHTML = 'Add another todo';
             closeButton.classList.remove('bg-red-600', 'hover:bg-red-800');
             closeButton.classList.add('bg-green-500', 'hover:bg-green-100');

@@ -34,7 +34,6 @@ function signIn() {
     .catch(console.error);
     
     function showModal(message) {
-        console.log('showModal');
         document.getElementById('message').innerHTML = message;
         document.getElementById('popup-modal').classList.remove('hidden');
     }
