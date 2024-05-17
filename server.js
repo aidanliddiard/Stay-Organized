@@ -20,8 +20,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
 // Serve static front-end files (HTML, etc.) from "./public"
-// app.use(express.static("public"));
-
+app.use(express.static("public"));
 
 ///////////////////////////////////////////////////////////////////////
 //   API ENDPOINTS ////////////////////////////////////////////////////
@@ -287,15 +286,45 @@ app.put("/api/todos/:id", function (request, response) {
 });
 
 
-/*
+
+// DELETE a todo
 // DELETE a todo
 app.delete('/api/todos/:id', function (request, response) {
-    console.info("LOG: Got a DELETE request for ToDos.  This feature is not implemented.");
+    console.info("LOG: Got a DELETE request for ToDos.");
+    const requestedId = request.params.id;
+    console.info(`LOG: Got a DELETE request to delete todo ${requestedId}`);
+
+    const json = fs.readFileSync(__dirname + "/data/todos.json", "utf8");
+    const todos = JSON.parse(json);
+
+    // Find the index of the requested todo
+    const index = todos.findIndex((todo) => String(todo.id) === String(requestedId));
+
+    // If todo not found, we have nothing left to do: respond
+    if (index === -1) {
+        console.warn("LOG: **ERROR: todo does not exist!");
+        response
+            .status(404)
+            .end();
+
+        return;
+    }
+
+    // Remove the todo from the array
+    const deletedTodo = todos.splice(index, 1);
+
+    // LOG data for tracing
+    console.info("LOG: This todo is deleted ->", deletedTodo);
+
+    // Write the updated todos back to the file
+    fs.writeFileSync(__dirname + "/data/todos.json", JSON.stringify(todos), "utf8");
+
     response
         .status(200)
-        .end();
-})
-*/
+        .json({
+            message: "Todo deleted successfully",
+        });
+});
 
 
 // POST a new user
@@ -348,6 +377,47 @@ app.post("/api/users", function (request, response) {
         .json(user);
 });
 
+app.post("/api/users/login", function (request, response) {
+    const { username, password } = request.body;
+    console.info(`LOG: Got a POST request for login with username ${username}`);
+
+    const json = fs.readFileSync(__dirname + "/data/users.json", "utf8");
+    const users = JSON.parse(json);
+
+    // Find the user
+    const byUsername = (user) => user.username.toLowerCase() === username.toLowerCase();
+    const matchingUser = users.find(byUsername);
+
+    // If no matching user
+    if (!matchingUser) {
+        console.warn(`LOG: **NOT FOUND**: user ${username} does not exist!`);
+        
+        response
+            .status(404)
+            .json({ error: "User not found or invalid password" });
+    
+        return;
+    }
+
+    // Check the password
+    if (matchingUser.password !== password) {
+        console.warn(`LOG: **UNAUTHORIZED**: invalid password for user ${username}`);
+        
+        response
+            .status(404)
+            .json({ error: "User not found or invalid password" });
+    
+        return;
+    }
+
+    // Login successful
+    console.info(`LOG: **SUCCESS**: user ${username} logged in successfully`);
+
+    response
+        .status(200)
+        .json({ message: "Logged in successfully", id: matchingUser.id });
+});
+
 
 ///////////////////////////////////////////////////////////////////////
 // Start the server ///////////////////////////////////////////////////
@@ -356,5 +426,5 @@ app.post("/api/users", function (request, response) {
 
 const server = app.listen(8083, () => {
     const port = server.address().port;
-    console.info("App listening at port", port);
+    console.info("App listening at http://localhost:%s", port);
 });
