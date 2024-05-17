@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
     <link href="./css/todos.css" rel="stylesheet">
-    <title>Todos</title>
+    <title>Todo List</title>
 </head>
 <body>
     <nav class="bg-white border-gray-200 dark:bg-gray-900">
@@ -43,7 +43,7 @@
     </nav>
     <div class="relative z-0 min-h-screen flex flex-col items-center">
         <div class="absolute inset-0 z-0 w-full h-full bg-cover bg-top backdrop-blur-md" style="background-image: url('./images/marissa-grootes-ck0i9Dnjtj0-unsplash.jpg');"></div>
-    <div class="flex justify-end space-x-4 w-full mt-4 mr-4 z-10">
+    <div class="filters flex justify-end space-x-4 w-full mt-4 mr-4 z-10">
         <select id="categories" class="bg-gray-50 border border-gray-300 text-gray-900 text-lg rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" onChange="fetchTodosByCategory()">
             <option value="all">All categories</option>
         </select>
@@ -54,6 +54,7 @@
             <option value="priorityLowHigh">Priority Low-High</option>
             <option value="deadline">Deadline</option>
         </select>
+        <button id="toggleDone" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onclick="toggleDone()">Hide Done</button>
     </div>
     
     <div class="flex flex-wrap justify-center z-10" id="todoList"></div>
