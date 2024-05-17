@@ -72,10 +72,12 @@ function createNewTodo(event) {
     ) {
       closeButton.innerHTML = "Add another todo";
       closeButton.classList.remove("bg-red-600", "hover:bg-red-800");
-      closeButton.classList.add("bg-green-500", "hover:bg-green-100");
+      closeButton.classList.add("bg-green-500", "hover:bg-green-800");
       redirectButton.classList.remove("hidden");
 
-      closeButton.addEventListener("click", hideModal);
+      closeButton.addEventListener("click", function () {
+        window.location.href = "/new_todo.html";
+      });
       redirectButton.addEventListener("click", function () {
         window.location.href = "/todos.html";
       });
